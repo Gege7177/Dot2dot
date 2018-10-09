@@ -10,7 +10,7 @@ exe = dot
 all: .depend $(OBJECTS) $(exe)
 
 dot: $(OBJECTS)
-	$(CC) $(OBJECTS) -o $(exe) 
+	$(CC) -pthread $(OBJECTS) -o $(exe) 
 
 .PHONY: clean 
 
