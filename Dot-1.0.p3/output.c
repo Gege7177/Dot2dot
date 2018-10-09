@@ -111,7 +111,7 @@ void dump_TR_elem (struct outfile *out, char* sequence, TRs_result_t* tr, unsign
 
   strcpy (tmpbuff, outStr);
 
-  //Build the tandem repeat from the sequence
+  /* Build the tandem repeat from the sequence  */
   seq_index = tr->origin_position;
   tmpbuff_index = chars_number;
   motifs_number = tr->motifs_number;
@@ -129,8 +129,8 @@ void dump_TR_elem (struct outfile *out, char* sequence, TRs_result_t* tr, unsign
   tmpbuff[tmpbuff_index - 1] = '\0';
 
   snprintf (outStr, n, "%s\n", tmpbuff);
-  //print_usintArray(motif_lengths, tr->motifs_number);
-  //strcpy (tmpbuff, outStr);  
+  /*print_usintArray(motif_lengths, tr->motifs_number);*/
+  /*strcpy (tmpbuff, outStr);  */
   tmpbuff[0] = '\0';
 }
 

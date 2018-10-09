@@ -4,8 +4,7 @@
 #include "common.h"
 #include "dot_matrix.h"
 #include "threads_manager.h"
-//#include "filtering.h" 
-#include "configReader.h" // <------------------ remove when you add filtering.h
+#include "configReader.h" 
 
 
 #define MAX(x,y)	(((x)<(y)) ? (y) : (x))
@@ -14,10 +13,10 @@
 #define NO_TR_FOUND 0
 #define TR_FOUND 1
 
-// Sizes for thread's TRs array... 
+/* Sizes for thread's TRs array... */
 #define RESIZE_TRS_AMOUNT 100
 #define RESIZE_MOTIFS_AMOUNT 1000
-// and for local TRs array
+/* and for local TRs array  */
 #define RESIZE_TR_BUNDLE_AMOUNT 10
 #define RESIZE_TR_MOTIFS_AMOUNT 100
 
@@ -27,19 +26,19 @@
 
 /*single TR data*/
 struct _TRs_result_t {
-	long int origin_position;
-	int insertions_count;
-	int full_length;
-	int partial_length;
-	short int copy_number;
-	short int period;
-	_Bool valid_TR;  /*  Used for filtering  */
-	float stats;  /*  Used for filtering  */
-	MATCH_ARRAY_TYPE purity_percentage;
-	unsigned long int motif_start_index; // start index of motifs in motif_legths array of trs_result_bundle
-	unsigned short int motifs_number; // copy_number + insertion groups + final group
-	
+  long int origin_position;
+  int insertions_count;
+  int full_length;
+  int partial_length;
+  short int copy_number;
+  short int period;
+  _Bool valid_TR;  /*  Used for filtering  */
+  float stats;  /*  Used for filtering  */
+  MATCH_ARRAY_TYPE purity_percentage;
+  unsigned long int motif_start_index; /* start index of motifs in motif_legths array of trs_result_bundle  */
+  unsigned short int motifs_number; /* copy_number + insertion groups + final group */
 };
+
 typedef struct _TRs_result_t TRs_result_t;
 
 /*
@@ -65,18 +64,16 @@ void copy_TR_struct(TRs_result_t* main, TRs_result_t* dest);
 \*****************************************************************************/
 
 struct _trs_result_bundle {
-	//final TRs array
-	TRs_result_t* TRs_found;
-	//dynamic size of TRs array (bytes)
-	unsigned long int TR_array_size;
-	unsigned long int max_trs_number;
-	//next index available TRs position in array
-        unsigned long int trs_found_offset;  /* XXXX  */
-	//Motif structs
-	unsigned short int *motif_lengths;
-	unsigned long int motif_lengths_size;
-	unsigned long int motif_lengths_offset;
-	unsigned long int max_motifs_number;
+  TRs_result_t* TRs_found;  /* final TRs array  */
+  unsigned long int TR_array_size; /* dynamic size of TRs array (bytes)  */
+  unsigned long int max_trs_number;
+  /* next index available TRs position in array  */
+  unsigned long int trs_found_offset;  /* XXXX  */
+  /*  Motif structs  */
+  unsigned short int *motif_lengths;
+  unsigned long int motif_lengths_size;
+  unsigned long int motif_lengths_offset;
+  unsigned long int max_motifs_number;
 };
 typedef struct _trs_result_bundle TRs_Result_Bundle;
 
@@ -167,17 +164,15 @@ void destroy_result_struct(result_findTR** rs);
 
 /*Thread input data structure*/
 struct _Dot_Thread_input {
-	//input sequence
-	char* sequence;
-	//sequence name
-	char* IDSeq;
-	TRs_Result_Bundle *thread_TRs_bundle;
-	struct dot_matrix *matrix;
-	struct config *config_params;
-	struct filemanager *file_manager;
-	MATCH_ARRAY_TYPE **weight_matrix;
-	struct outfile *output;
-	short int t_id;
+  char* sequence;  /* input sequence  */
+  char* IDSeq;  /*    sequence name  */
+  TRs_Result_Bundle *thread_TRs_bundle;
+  struct dot_matrix *matrix;
+  struct config *config_params;
+  struct filemanager *file_manager;
+  MATCH_ARRAY_TYPE **weight_matrix;
+  struct outfile *output;
+  short int t_id;
 };
 typedef struct _Dot_Thread_input Dot_Thread_input;
 
@@ -185,9 +180,6 @@ Dot_Thread_input* dot_Thread_obj_init(struct config *cp, MATCH_ARRAY_TYPE **wm, 
 void destroy_dot_Thread_obj(Dot_Thread_input** obj);
 void reset_dot_Thread_obj(Dot_Thread_input* obj);
 
-/*****************************************************************************\
-*******************************************************************************
-\*****************************************************************************/
 
 /*****************************************************************************\
 ***************************** ALGORITHM FUNCTIONS *****************************
@@ -218,7 +210,7 @@ MATCH_ARRAY_TYPE getSumFromMatchValues(int window_length, int window_index, int 
  * Initialize result_findTR* structure and return it.
  * result_findTR* used by findTandemRepeats function
  */
-result_findTR* init_results_struct();
+result_findTR *init_results_struct ();
 
 
 /*

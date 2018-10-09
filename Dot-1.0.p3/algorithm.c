@@ -54,7 +54,7 @@ TRs_Result_Bundle* init_TRs_Bundle(int init_n_elem_trs, int init_n_elem_motifs) 
 			return NULL;
 	};
 
-	//Allocate TRS bundle
+	/*  Allocate TRS bundle  */
 	size = init_n_elem_trs * sizeof(TRs_result_t);
 	if ((trs_b->TRs_found = (TRs_result_t*) malloc( size )) == NULL) {
 			perror("Malloc error for trs_b->TRs_found in init_TRs_Bundle\n");
@@ -68,7 +68,7 @@ TRs_Result_Bundle* init_TRs_Bundle(int init_n_elem_trs, int init_n_elem_motifs) 
 		reset_TRs_result(&(trs_b->TRs_found[i]));		
 	}
 	*/
-	//Allocate motifs array
+	/* Allocate motifs array  */
 	size = init_n_elem_motifs * sizeof(unsigned short int);
 	if ((trs_b->motif_lengths = (unsigned short int*) malloc( size )) == NULL) {
 			perror("Malloc error for trs_b->motif_lengths in init_TRs_Bundle\n");
@@ -92,7 +92,7 @@ short int copy_TRs_Bundle(TRs_Result_Bundle* main, TRs_Result_Bundle* dest) {
 	unsigned long int i;
 
 	if ( dest->max_trs_number < main->max_trs_number ) {
-		//printf("TRS COPY NUMBER (size lower):%u\n", dest->copy_number);
+	  /*printf("TRS COPY NUMBER (size lower):%u\n", dest->copy_number); */
 		
 		if ((dest->TRs_found = (TRs_result_t*) realloc(dest->TRs_found, main->TR_array_size)) == NULL) {
 			perror("Realloc error for dest->TRs_found in copy_TRs_Bundle\n");
@@ -108,8 +108,8 @@ short int copy_TRs_Bundle(TRs_Result_Bundle* main, TRs_Result_Bundle* dest) {
 		}
 
 	} 
-	else {//Copy only the content as the size is ok (Equal or bigger)
-		//printf("TRS COPY NUMBER (size equal or bigger):%u\n", dest->copy_number);
+	else {/*Copy only the content as the size is ok (Equal or bigger)  */
+	  /*printf("TRS COPY NUMBER (size equal or bigger):%u\n", dest->copy_number);*/
 		
 		dest->trs_found_offset = main->trs_found_offset;
 		for ( i = 0; i < main->trs_found_offset ; ++i ) {
@@ -123,7 +123,7 @@ short int copy_TRs_Bundle(TRs_Result_Bundle* main, TRs_Result_Bundle* dest) {
 	}
 
 	if ( dest->max_motifs_number < main->max_motifs_number ) {
-		//printf("TRS COPY NUMBER (size lower):%u\n", dest->copy_number);
+	  /*printf("TRS COPY NUMBER (size lower):%u\n", dest->copy_number);*/
 		
 		if ((dest->motif_lengths = (unsigned short int *) realloc(dest->motif_lengths, main->motif_lengths_size)) == NULL) {
 			perror("Realloc error for dest->motif_lengths in copy_TR_struct\n");
@@ -139,8 +139,8 @@ short int copy_TRs_Bundle(TRs_Result_Bundle* main, TRs_Result_Bundle* dest) {
 		}
 
 	} 
-	else {//Copy only the content as the size is ok (Equal or bigger)
-		//printf("TRS COPY NUMBER (size equal or bigger):%u\n", dest->copy_number);
+	else {/*Copy only the content as the size is ok (Equal or bigger)*/
+		/*printf("TRS COPY NUMBER (size equal or bigger):%u\n", dest->copy_number);*/
 		
 		dest->motif_lengths_offset = main->motif_lengths_offset;
 		for ( i = 0; i < main->motif_lengths_offset ; ++i ) {
@@ -183,20 +183,20 @@ short int trs_amount_check_and_resize(TRs_Result_Bundle* obj, int init_n_elem_tr
 short int insert_TRresult_inBundle(TRs_Result_Bundle* trs_bundle, TRs_Result_Bundle* trs_bundle_single, int resize_n_elem_trs, int resize_n_elem_motifs) {
 
 	unsigned long int j;
-	//printf("TRS_OFFSET %u\n", trs_bundle_single->trs_found_offset);
+	/*printf("TRS_OFFSET %u\n", trs_bundle_single->trs_found_offset);*/
 	if (trs_bundle_single->trs_found_offset == 1) {
 	
 		if (trs_amount_check_and_resize(trs_bundle, resize_n_elem_trs)) {
 			perror("Error in insert_TRresult_inBundle\n");
 			return 1;
 		}
-		//Copy the TR_found
+		/*  Copy the TR_found  */
 		copy_TR_struct(&(trs_bundle_single->TRs_found[0]), &(trs_bundle->TRs_found[trs_bundle->trs_found_offset]));
-		//Copy the start index of the motif lengths
+		/*  Copy the start index of the motif lengths  */
 		trs_bundle->TRs_found[trs_bundle->trs_found_offset].motif_start_index =	trs_bundle->motif_lengths_offset;				
 		trs_bundle->trs_found_offset++;
 
-		//Copy the motifs lengths
+		/*  Copy the motifs lengths  */
 		for ( j = 0; j < trs_bundle_single->motif_lengths_offset ; ++j) {
 			insert_TRmotif_inTRresult(trs_bundle, trs_bundle_single->motif_lengths[j], resize_n_elem_motifs);
 		}
@@ -309,9 +309,9 @@ Dot_Thread_input* dot_Thread_obj_init(struct config *cp, MATCH_ARRAY_TYPE **wm, 
 		return NULL;
 	}
 	
-	//input sequence
+	/*  input sequence  */
 	dot_Thread_input->sequence = NULL;
-	//sequence name
+	/*  sequence name  */
 	dot_Thread_input->IDSeq = NULL;
 	dot_Thread_input->thread_TRs_bundle = init_TRs_Bundle(RESIZE_TRS_AMOUNT, RESIZE_MOTIFS_AMOUNT);	
 	dot_Thread_input->matrix = NULL;
@@ -326,11 +326,9 @@ Dot_Thread_input* dot_Thread_obj_init(struct config *cp, MATCH_ARRAY_TYPE **wm, 
 
 void destroy_dot_Thread_obj(Dot_Thread_input** obj) {
 
-	//free((*obj)->sequence);
-	//free((*obj)->IDSeq);
 	
 	destroy_TRs_Bundle(&((*obj)->thread_TRs_bundle));
-	// freed at the end
+	/* freed at the end  */
 	(*obj)->matrix = NULL;
 	(*obj)->config_params = NULL;
 	(*obj)->weight_matrix = NULL;
@@ -481,7 +479,7 @@ int findTandemRepeats(int window_length, int window_index, struct dot_matrix *m,
 			}
 
 			if (rs->result_code != TR_FOUND) { rs->result_code = TR_FOUND; }
-			//I use always the first because in this function I find 1 TR
+			/*I use always the first because in this function I find 1 TR  */
 			copy_number++;
 			
 			m->mask[current_match_index]=CHECKED;
@@ -541,12 +539,12 @@ int findTandemRepeats(int window_length, int window_index, struct dot_matrix *m,
 		rs->resulted_TR->TRs_found[0].insertions_count = insertions_count;
 		rs->resulted_TR->TRs_found[0].motif_start_index = 0;
 		rs->resulted_TR->TRs_found[0].motifs_number = motifs_number;
-		//The bundle has one result
+		/*The bundle has one result */
 		rs->resulted_TR->trs_found_offset = 1;
 	} else {
 		/* NO TR FOUND */
-		//Leave the result_struct unmodified
-		//It is resetted out of this function
+		/* Leave the result_struct unmodified  */
+	        /* It is resetted out of this function */
 	}
 	return 0;
 }
@@ -603,7 +601,7 @@ void expansion_filter(TRs_Result_Bundle* TRs_bundle, TRs_Result_Bundle* last_tan
 			}
 			/* Cycle all the array because results could be between NULL pointers */
 			/*Second, filter by purity */
-			//Start from the first valid
+			/*Start from the first valid*/
 #ifdef DEBUG_ALG
 			printf("\t|-- Exp Filter --> There are %d TRs left after filtering by score and partial length\n", tot_trs_left);			
 #endif
@@ -612,7 +610,7 @@ void expansion_filter(TRs_Result_Bundle* TRs_bundle, TRs_Result_Bundle* last_tan
 			last = &results[i];
 			++i;
 
-			//Still there are more than 1 results
+			/*Still there are more than 1 results*/
 			if (tot_trs_left > 1) {
 				while( i < TRs_bundle->trs_found_offset ) {
 					if (results[i].copy_number == 0) { ++i; continue; }
@@ -625,11 +623,11 @@ void expansion_filter(TRs_Result_Bundle* TRs_bundle, TRs_Result_Bundle* last_tan
 					++i;				
 				}
 			}
-			//Copy last into last_tandem_found getting the motifs too
+			/*Copy last into last_tandem_found getting the motifs too*/
 			copy_TR_struct(last, &(last_tandem_found->TRs_found[0]));
-			last_tandem_found->TRs_found[0].motif_start_index = 0;//always zero at this point
+			last_tandem_found->TRs_found[0].motif_start_index = 0; /*always zero at this point  */
 			last_tandem_found->trs_found_offset = 1;
-			last_tandem_found->motif_lengths_offset = 0;//always zero at this point
+			last_tandem_found->motif_lengths_offset = 0; /*always zero at this point*/
 			motifs_number = last->motifs_number;
 			for ( j = last->motif_start_index; motifs_number > 0; ++j, --motifs_number ) {
 				insert_TRmotif_inTRresult(last_tandem_found, TRs_bundle->motif_lengths[j], RESIZE_TR_MOTIFS_AMOUNT);
@@ -778,13 +776,13 @@ int start_TRs_search (Dot_Thread_input* param) {
 					return 1;
 				}
 			}
-			// Reset current_result
+			/* Reset current_result  */
 			reset_result_struct(current_result);
 			
 		}
 		
 		/* Apply Expansion Filter to the TRs list of the same zone (same Window_index)*/
-		//last_tandem_found is NULL or has a valid TR to compare to the previous one
+		/*last_tandem_found is NULL or has a valid TR to compare to the previous one */
 		expansion_filter(trs_current_bundle, last_tandem_found, biggest_full_length, cfg->tollerance);
 #ifdef DEBUG_ALG
 		printf("\tTRS_BUNDLE of %d FILTERED\n", window_index);
@@ -794,7 +792,7 @@ int start_TRs_search (Dot_Thread_input* param) {
 			window_index++; 
 		} else {
 			
-			//Insert the tandem as it is the first found	
+		  /*Insert the tandem as it is the first found	 */
 			if (previous_window_tandem->motif_lengths_offset == 0) {
 #ifdef DEBUG_ALG
 				printf("\tTRS WINDOW INDEX PREVIUOS WITH 0 COPY NUMBER:%d\n", window_index);
@@ -844,7 +842,7 @@ int start_TRs_search (Dot_Thread_input* param) {
 						perror("Error in inserting the current result in the Thread TRs bundle\n");
 						return 1;
 					};
-					//reset_TRs_Bundle(previous_window_tandem);
+					/*reset_TRs_Bundle(previous_window_tandem);*/
 					if ( copy_TRs_Bundle(last_tandem_found, previous_window_tandem) ) {
 						perror("Error in copying last_tandem_found to previous_window_tandem in start_TRs_search\n");
 						return 1;

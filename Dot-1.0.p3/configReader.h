@@ -33,10 +33,10 @@
 
 struct config {
   unsigned short int flags;
-  int nvalue; // min window length
-  int xvalue; // max window length
-  int jvalue; // jumps allowed
-  int gvalue; // gaps allowed
+  int nvalue; /* min window length  */
+  int xvalue; /* max window length  */
+  int jvalue; /* jumps allowed  */
+  int gvalue; /* gaps allowed  */
   int thread_max;
   char svalue[MAX_PARAM_LEN]; /**/
   char cvalue[MAX_PARAM_LEN];  /**/

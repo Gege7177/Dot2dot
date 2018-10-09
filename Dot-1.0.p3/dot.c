@@ -73,7 +73,7 @@ void* dot_thread_fn (void* args) {
 
             
 
-	    // Print TRs on file
+	  /* Print TRs on file  */
           pt_m_lock(&mtx_wrtfile);
         
           while ( param->t_id != write_file_global ) {
