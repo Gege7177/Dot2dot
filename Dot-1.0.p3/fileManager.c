@@ -12,6 +12,8 @@ void __filemanager_read_id (char *filename, char *id_buff) {
   }
   /* skip the file extension  */
   for (end_pos = fn_len - 1; end_pos > start_pos && filename[end_pos] != '.'; end_pos --);
+  /*  If the file has no extension  */
+  if (start_pos == end_pos) end_pos = fn_len;
   /*  Copy file name bounded to the maximum label length  */
   for (i = start_pos, j = 0; i < end_pos && j < MAX_LABEL_LENGTH - 1; i ++, j ++) {
     id_buff[j] = filename[i];
@@ -36,7 +38,7 @@ seqfile_t __filemanager_get_filetype (struct filemanager *fmobj) {
   return UNKNOWN;
 }
 void filemanager_destroy (struct filemanager *fmobj) {
-  fclose ( fmobj->pf );
+  fclose (fmobj->pf);
   free (fmobj);
   fmobj = NULL;
 }
@@ -140,7 +142,8 @@ struct sequence_t *__filemanager_next_seq (struct filemanager *fmobj, struct seq
 	parse_status = SEQUENCE;
 	break;
       case ' ':
-	/*  without break to allow spaces in fastq (instead trim in fasta)  */
+	/* without break to allow spaces in fastq (instead trim in fasta)  */
+	/* this will insert an extra space that will be removed in H_POST_LABEL  */
 	if (fmobj->filetype == FASTA) parse_status = H_POST_LABEL;
       default:
 	if (seq->label_size < MAX_LABEL_LENGTH - 1) {  /*  Prevent exceed buffer size with \0   */
@@ -151,8 +154,13 @@ struct sequence_t *__filemanager_next_seq (struct filemanager *fmobj, struct seq
 	break;
       }
       break;
-    case H_POST_LABEL:
-      if (next_char == '\n') parse_status = SEQUENCE;
+    case H_POST_LABEL: /*  happens only with fmobj->filetype == FASTA  */
+      if (next_char == '\n') {
+	parse_status = SEQUENCE;
+	/*  Removes the extra space due to the absence of the break in the H_LABEL case  */
+	seq->label_size --;
+	seq->label[seq->label_size] = '\0';
+      }
       break;
     case SEQUENCE:
       switch (next_char) {
