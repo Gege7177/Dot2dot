@@ -273,7 +273,7 @@ struct paramList *loadConfigFromFile (char *filename) {
     lineNumber ++;
     /*  remove padding at the end of the line  */
     for (i = strlen (line) - 1; i >= 0; i --) {
-      if (line[i] == ' ' || line[i] == '\n' || line[i] == '\t') line[i] = '\0';
+      if (line[i] == ' ' || line[i] == '\n' || line[i] == '\t' || line[i] == '\r') line[i] = '\0';
       else break;
     }
     for (i = 0; line[i] != '\0'; i ++) {  /*  skip white spaces  */
@@ -315,7 +315,7 @@ struct paramList *loadConfigFromFile (char *filename) {
     if (l == NULL) return NULL;  /*  Does not free memory - the program will terminate  */
     strncpy (l->param, key, MAX_FILELINE);
     strncpy (l->value, val, MAX_FILELINE);
-    /* printf ("%s, %s\n",key, val); */
+    printf ("*%s*, *%s*\n",key, val);
   }
   fclose (pf);
   return start;
