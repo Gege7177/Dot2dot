@@ -315,7 +315,7 @@ struct paramList *loadConfigFromFile (char *filename) {
     if (l == NULL) return NULL;  /*  Does not free memory - the program will terminate  */
     strncpy (l->param, key, MAX_FILELINE);
     strncpy (l->value, val, MAX_FILELINE);
-    printf ("*%s*, *%s*\n",key, val);
+    /*  printf ("*%s*, *%s*\n",key, val);   */
   }
   fclose (pf);
   return start;
